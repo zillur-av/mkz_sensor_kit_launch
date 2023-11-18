@@ -1,0 +1,31 @@
+<launch>
+  <arg name="launch_top_ouster" default="true" description="start top ouster"/>
+  <arg name="launch_traffic_camera" default="true" description="start traffic camera"/>
+  <arg name="launch_front_velodyne" default="false" description="start front_velodyne"/>
+  <arg name="launch_novatel" default="false" description="start novatel gnss receiver"/>
+  
+		
+	<group if="$(var launch_top_ouster)">
+	  <include file="$(find-pkg-share ouster_ros)/launch/ouster_sensor.launch.xml">
+	  </include>
+	</group>
+	 
+	<group if="$(var launch_front_velodyne)"> 
+	  <include file="$(find-pkg-share velodyne)/launch/velodyne_all.py">
+	  </include>
+	</group>
+
+	<group if="$(var launch_novatel)">
+	  <include file="$(find-pkg-share novatel_gps_driver)/launch/tester_for_usb.launch.py">
+		<arg name="output_topic" value="gnss/fix" />
+		<arg name="gps_link" value="gnss_link" />
+	  </include>
+	</group>
+
+	<group if="$(var launch_traffic_camera)">
+	  <include file="$(find-pkg-share opencv_cam)/launch/composition_launch.py">
+	  </include>
+	</group>
+
+
+</launch>
